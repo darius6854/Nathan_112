@@ -67,12 +67,15 @@ nav a:focus {
     color: rgb(11, 117, 179);
     font-family: 'Sarabun', sans-serif;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-top: 0;
 }
 
 .highlight p {
     font-size: 20px;
     color: #444;
     margin-bottom: 30px;
+    margin-top: 0;
 }
 
 .codeExample {
@@ -126,4 +129,30 @@ tbody td {
     background-color: rgb(0, 183, 255);
     padding: 10px;
     margin-top: 20px;
+}
+hr {
+    border: 1px dashed rgb(54, 50, 82);
+   /* height: 2px;
+    background-color: rgb(22, 1, 22);*/
+    margin: 20px;
+    width: 95%;
+}
+.menu a {
+    text-decoration: none;
+    color: #000000;
+    font-family: 'Sarabun', sans-serif; /* เพิ่ม sans-serif เพื่อฟอนต์สำรอง */
+    font-weight: bold; /* ตั้งค่าเริ่มต้นเป็น bold เพื่อให้ contrast กับ bolder ตอน hover */
+    /* เพิ่ม transition สำหรับทุก property ที่เราจะเปลี่ยนใน :hover */
+    transition: color 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+    padding: 8px 12px; /* เพิ่ม padding เพื่อให้มีพื้นที่สำหรับสีพื้นหลัง */
+    display: inline-block; /* สำคัญ: ต้องเป็น inline-block หรือ block เพื่อให้ transform มีผล */
+    border-radius: 5px; /* ใส่ border-radius ตั้งแต่แรกเผื่อมีสีพื้นหลัง */
+}
+
+.menu a:hover {
+    background-color: #00e1ff; /* สีฟ้าสดใสตามที่คุณระบุ */
+    color: #444; /* สีตัวอักษรเข้มขึ้น */
+    font-weight: bolder; /* ตัวอักษรหนาขึ้น */
+    transform: scale(1.05); /* ทำให้ลิงก์ขยายใหญ่ขึ้น 5% */
+    /* ไม่ต้องใส่ border-radius ซ้ำตรงนี้ ถ้าใส่ใน .menu a แล้ว */
 }

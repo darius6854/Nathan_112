@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สเปคคอมพิวเตอร์ | Cyber-Matrix Build (Detail)</title> <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="https://example.com/favicon.ico"> <meta name="description" content="สเปคคอมพิวเตอร์ AMD Ryzen 5 4600G & RTX 4060 ในธีม Cyberpunk พร้อม AI Assistant">
+
+    <style>
+        /* --- Global Variables & Cyberpunk Yellow & Black Palette --- */
+        :root {
+            --primary-yellow: #FFD700; /* Gold / Cyber Yellow */
+            --secondary-orange: #FFA500; /* Orange Accent */
+            --deep-black: #000000; /* Absolute Black */
+            --dark-charcoal: #1A1A1A; /* Darker background elements */
+            --light-gray-text: #F0F0F0; /* Main readable text color */
+            --subtle-gray-border: #333333; /* For subtle borders */
+            --light-placeholder: #888888; /* Placeholder text */
+            --glow-strength-weak: 0.05;
+            --glow-strength-medium: 0.15;
+            --glow-strength-strong: 0.3;
+            --transition-speed: 0.4s;
+            --border-radius-primary: 20px;
+            --border-radius-secondary: 15px;
+        }
+
+        /* --- Base Styles & The Matrix Background --- */
+        body {
+            font-family: 'Sarabun', sans-serif;
+            font-size: 16px;
+            color: var(--light-gray-text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            overflow-x: hidden;
+            background: 
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.98), rgba(17, 17, 17, 0.98)), /* Near opaque black overlay */
+                url('http://googleusercontent.com/image_collection/image_retrieval/17197872862550010897') no-repeat center center fixed; /* Cyberpunk image */
+            background-size: cover;
+            animation: backgroundShift 60s linear infinite alternate; /* Slow, subtle background shift */
+            position: relative;
+            min-height: 100vh; /* Ensure body takes full viewport height */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Global Cyber-Glow Effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            box-shadow: 0 0 80px var(--primary-yellow) inset, 0 0 50px var(--secondary-orange) inset;
+            pointer-events: none;
+            opacity: var(--glow-strength-weak);
+            z-index: -1;
+            animation: neonPulse 8s infinite alternate ease-in-out;
+        }
+
+        /* --- Header & Title Sequence --- */
+        header {
+            background-color: rgba(0, 0, 0, 0.92); /* Darker, slightly more opaque */
+            backdrop-filter: blur(10px);
+            text-align: center;
+            padding: 35px 25px;
+            margin-bottom: 30px;
+            color: var(--primary-yellow); /* Primary accent for main title */
+            font-size: 2.8em;
+            font-weight: 700;
+            border-bottom: 4px solid var(--secondary-orange);
+            box-shadow: 0 8px 30px rgba(255, 215, 0, var(--glow-strength-strong)); /* Stronger yellow glow */
+            opacity: 0;
+            transform: translateY(-60px);
+            animation: fadeInSlideDown 1s ease-out forwards;
+            animation-delay: 0.2s;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0 0 var(--border-radius-primary) var(--border-radius-primary);
+        }
+        
+        /* Subtle title glow on load */
+        header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            box-shadow: 0 0 25px var(--primary-yellow), 0 0 50px var(--secondary-orange);
+            opacity: 0;
+            animation: headerGlow 1.8s ease-out forwards;
+            animation-delay: 0.5s;
+        }
+
+        /* --- Main Content Container (Article) --- */
+        article {
+            max-width: 1050px;
+            margin: 20px auto;
+            background-color: rgba(17, 17, 17, 0.98); /* Near opaque for content clarity */
+            backdrop-filter: blur(12px);
+            padding: 30px;
+            border-radius: var(--border-radius-primary);
+            border: 2px solid var(--subtle-gray-border);
+            box-shadow: 
+                0 10px 40px rgba(0, 0, 0, 0.8), /* Stronger base shadow */
+                0 0 60px rgba(255, 215, 0, var(--glow-strength-medium)); /* Subtle yellow glow */
+            opacity: 0;
+            transform: translateY(60px);
+            animation: fadeInSlideUp 1s ease-out forwards;
+            animation-delay: 0.8s;
+            position: relative;
+            flex-grow: 1; /* Allow content to grow */
+        }
+        
+        /* Inner glowing border effect */
+        article::before {
+            content: '';
+            position: absolute;
+            inset: -2px; /* Slightly outside the main border */
+            border-radius: calc(var(--border-radius-primary) + 2px); /* Match outer radius */
+            border: 3px solid transparent;
+            background: linear-gradient(45deg, var(--primary-yellow), var(--secondary-orange)) border-box;
+            -webkit-mask: 
+                linear-gradient(#fff 0 0) padding-box, 
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: var(--glow-strength-strong); /* More prominent for border glow */
+            pointer-events: none;
+        }
+
+        /* --- Data Table Styling --- */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 30px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Table-specific subtle shadow */
+            border-radius: var(--border-radius-secondary); /* Apply border-radius to table for uniform look */
+            overflow: hidden; /* Ensure rounded corners are visible */
+        }
+
+        table th,
+        table td {
+            border: 1px solid var(--subtle-gray-border);
+            padding: 16px 20px;
+            text-align: left;
+            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease, 
+                        transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease, 
+                        border-color var(--transition-speed) ease;
+            position: relative;
+            z-index: 1; /* For hover effects */
+        }
+
+        table thead th {
+            background-color: rgba(0, 0, 0, 0.98); /* Very dark header */
+            color: var(--primary-yellow);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 3px solid var(--secondary-orange);
+            font-size: 1.1em;
+        }
+
+        /* Rounded corners for table headers (top) */
+        table thead tr:first-child th:first-child { border-top-left-radius: var(--border-radius-secondary); }
+        table thead tr:first-child th:last-child { border-top-right-radius: var(--border-radius-secondary); }
+
+        table tbody tr:nth-child(even) {
+            background-color: rgba(5, 5, 5, 0.95); /* Slightly lighter black for distinction */
+        }
+
+        table tbody tr:nth-child(odd) {
+            background-color: rgba(10, 10, 10, 0.95); /* Even lighter for distinction */
+        }
+
+        /* Hover effect for table rows */
+        table tbody tr:hover {
+            background-color: rgba(255, 215, 0, 0.1); /* Subtle yellow highlight */
+            transform: translateY(-3px) scale(1.005);
+            box-shadow: 0 5px 25px rgba(255, 215, 0, var(--glow-strength-medium));
+            z-index: 2;
+        }
+        
+        /* Specific hover effects for cells (excluding the first component column) */
+        table tbody td:not([data-label="Component"]):hover {
+            box-shadow: 0 0 25px var(--primary-yellow); /* Stronger yellow glow */
+            border-color: var(--primary-yellow);
+            transform: translateY(-2px);
+            cursor: pointer;
+            color: var(--primary-yellow); /* Text turns primary yellow on hover */
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.7); /* Subtle text glow */
+        }
+
+        /* Styling for the link within the Detail column */
+        table tbody td[data-label="Detail"] a { /* Changed from Model to Detail */
+            color: var(--primary-yellow);
+            text-decoration: none;
+            font-weight: bold;
+            transition: color var(--transition-speed) ease, text-shadow var(--transition-speed) ease;
+        }
+
+        table tbody td[data-label="Detail"] a:hover { /* Changed from Model to Detail */
+            color: var(--secondary-orange);
+            text-decoration: underline;
+            text-shadow: 0 0 8px rgba(255, 165, 0, 0.8);
+        }
+
+        /* Style for footer total row */
+        table tfoot tr {
+            background-color: var(--deep-black) !important;
+            color: var(--secondary-orange);
+            font-weight: bold;
+            border-top: 3px solid var(--primary-yellow);
+            font-size: 1.2em;
+        }
+
+        table tfoot td {
+            border-top: 3px solid var(--primary-yellow);
+            background-color: var(--deep-black) !important;
+            padding: 18px 20px;
+        }
+
+        /* Rounded corners for table footer (bottom) */
+        table tfoot tr:last-child td:first-child { border-bottom-left-radius: var(--border-radius-secondary); }
+        table tfoot tr:last-child td:last-child { border-bottom-right-radius: var(--border-radius-secondary); }
+
+
+        /* --- AI Assistant Module --- */
+        .ai-section {
+            max-width: 1050px;
+            margin: 50px auto 30px auto;
+            background-color: rgba(17, 17, 17, 0.98);
+            backdrop-filter: blur(12px);
+            padding: 30px;
+            border-radius: var(--border-radius-primary);
+            border: 2px solid var(--subtle-gray-border);
+            box-shadow: 
+                0 10px 40px rgba(0, 0, 0, 0.8), 
+                0 0 60px rgba(255, 165, 0, var(--glow-strength-medium)); /* Orange glow for AI section */
+            text-align: center;
+            opacity: 0;
+            transform: translateY(60px);
+            animation: fadeInSlideUp 1s ease-out forwards;
+            animation-delay: 1.2s;
+        }
+
+        .ai-section h2 {
+            color: var(--primary-yellow);
+            font-size: 2.2em;
+            margin-bottom: 25px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+        }
+
+        .ai-section p {
+            color: var(--light-gray-text);
+            margin-bottom: 30px;
+            line-height: 1.8;
+            font-weight: 300;
+        }
+
+        .ai-chat-box {
+            background-color: rgba(0, 0, 0, 0.92);
+            border: 2px solid var(--primary-yellow);
+            border-radius: var(--border-radius-secondary);
+            padding: 20px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            box-shadow: 0 0 20px rgba(255, 215, 0, var(--glow-strength-strong));
+        }
+
+        .ai-chat-box input {
+            flex-grow: 1;
+            padding: 14px;
+            border: 1px solid var(--primary-yellow);
+            border-radius: var(--border-radius-secondary);
+            background-color: var(--deep-black);
+            color: var(--light-gray-text);
+            font-size: 1.1em;
+            outline: none;
+            box-shadow: inset 0 0 8px rgba(255, 215, 0, var(--glow-strength-weak));
+            transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+        }
+
+        .ai-chat-box input:focus {
+            border-color: var(--secondary-orange);
+            box-shadow: inset 0 0 12px rgba(255, 165, 0, var(--glow-strength-medium)), 0 0 15px rgba(255, 165, 0, var(--glow-strength-strong));
+        }
+
+        .ai-chat-box button {
+            background-color: var(--primary-yellow);
+            color: var(--deep-black); /* Text on button is black */
+            border: none;
+            padding: 14px 25px;
+            border-radius: var(--border-radius-secondary);
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color var(--transition-speed) ease, transform 0.2s ease, 
+                        box-shadow var(--transition-speed) ease, color var(--transition-speed) ease;
+            box-shadow: 0 0 15px rgba(255, 215, 0, var(--glow-strength-strong));
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .ai-chat-box button:hover {
+            background-color: var(--secondary-orange);
+            color: var(--light-gray-text); /* Text on hover is light gray */
+            transform: translateY(-3px);
+            box-shadow: 0 0 25px rgba(255, 165, 0, var(--glow-strength-strong));
+        }
+
+        .ai-response {
+            margin-top: 25px;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.85); /* Slightly darker for distinct response */
+            border: 1px solid var(--secondary-orange);
+            border-radius: var(--border-radius-secondary);
+            text-align: left;
+            color: var(--light-gray-text);
+            font-style: italic;
+            box-shadow: inset 0 0 10px rgba(255, 165, 0, var(--glow-strength-weak));
+        }
+        .ai-response p {
+            margin: 0; /* Remove default paragraph margin within response box */
+        }
+
+        /* --- Keyframe Animations --- */
+        @keyframes backgroundShift {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+
+        @keyframes neonPulse {
+            0% { opacity: var(--glow-strength-weak); box-shadow: 0 0 80px var(--primary-yellow) inset, 0 0 50px var(--secondary-orange) inset; }
+            50% { opacity: var(--glow-strength-medium); box-shadow: 0 0 100px var(--primary-yellow) inset, 0 0 60px var(--secondary-orange) inset; }
+            100% { opacity: var(--glow-strength-weak); box-shadow: 0 0 80px var(--primary-yellow) inset, 0 0 50px var(--secondary-orange) inset; }
+        }
+
+        @keyframes fadeInSlideDown {
+            from { opacity: 0; transform: translateY(-60px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInSlideUp {
+            from { opacity: 0; transform: translateY(60px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes headerGlow {
+            0% { opacity: 0; box-shadow: 0 0 0px var(--primary-yellow); }
+            50% { opacity: 1; box-shadow: 0 0 25px var(--primary-yellow), 0 0 50px var(--secondary-orange); }
+            100% { opacity: 0; box-shadow: 0 0 0px var(--primary-yellow); }
+        }
+        
+
+        /* --- Responsive Design (Mobile First Approach) --- */
+        @media (max-width: 768px) {
+            body {
+                font-size: 14px; /* Slightly smaller base font on mobile */
+            }
+
+            header {
+                font-size: 2em;
+                padding: 20px 10px;
+                border-radius: 0 0 var(--border-radius-secondary) var(--border-radius-secondary);
+            }
+            article, .ai-section {
+                margin: 10px; /* Reduced margin */
+                padding: 15px; /* Reduced padding */
+                border-radius: var(--border-radius-secondary);
+            }
+            table {
+                box-shadow: none; /* Remove table shadow on mobile */
+            }
+            table, thead, tbody, th, td, tr {
+                display: block; /* Stack elements for mobile */
+            }
+            thead tr {
+                position: absolute; /* Hide table headers visually but keep for accessibility */
+                top: -9999px;
+                left: -9999px;
+            }
+            tr {
+                border: 1px solid var(--subtle-gray-border);
+                margin-bottom: 15px;
+                border-radius: var(--border-radius-secondary);
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 215, 0, var(--glow-strength-medium)); /* Yellow glow */
+            }
+            td {
+                border: none; /* Remove individual cell borders */
+                border-bottom: 1px solid rgba(51, 51, 51, 0.7); /* Subtle separator */
+                position: relative;
+                padding-left: 50%; /* Make space for data-label */
+                text-align: right;
+                background-color: rgba(10, 10, 10, 0.98) !important; /* Consistent dark background */
+                font-size: 1.1em; /* Slightly larger text in cells */
+            }
+            td:last-child {
+                border-bottom: 0; /* No border for the last cell */
+            }
+            td::before {
+                content: attr(data-label); /* Show label from data-label attribute */
+                position: absolute;
+                left: 15px;
+                width: calc(50% - 30px);
+                padding-right: 10px;
+                white-space: nowrap;
+                text-align: left;
+                font-weight: bold;
+                color: var(--secondary-orange); /* Label in secondary orange */
+            }
+            table tfoot td {
+                text-align: right !important;
+                padding-left: 15px;
+                font-size: 1.1em;
+            }
+            table tfoot td:first-child {
+                text-align: left !important; /* Ensure the "Total" label aligns left */
+            }
+
+            .ai-chat-box {
+                flex-direction: column; /* Stack input and button */
+                padding: 15px;
+            }
+            .ai-chat-box input, .ai-chat-box button {
+                width: 100%;
+                padding: 12px;
+                font-size: 1em;
+            }
+            .ai-chat-box button {
+                margin-top: 10px; /* Space between input and button */
+            }
+            .ai-response {
+                padding: 15px;
+            }
+        }
+        /* Desktop specific adjustments */
+        @media (min-width: 769px) {
+            table thead tr:last-child th:first-child { border-bottom-left-radius: 0; }
+            table thead tr:last-child th:last-child { border-bottom-right-radius: 0; }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        AMD Ryzen 5 4600G & RTX 4060: Future's Core
+    </header>
+
+    <main> <article aria-labelledby="specs-heading">
+            <h1 id="specs-heading" style="text-align: center; color: var(--primary-yellow); margin-bottom: 25px; text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);">
+                Digital Specs Manifest / Detail Log </h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Component</th>
+                        <th>Detail</th> <th>Price (THB)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td data-label="Component">CPU</td>
+                        <td data-label="Detail"><a href="https://notebookspec.com/pc/9712275" target="_blank" rel="noopener noreferrer">AMD Ryzen 5 4600G</a></td> <td data-label="Price (THB)">5,190.-</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Component">Mainboard</td>
+                        <td data-label="Detail"><a href="https://notebookspec.com/pc/9712275" target="_blank" rel="noopener noreferrer">GIGABYTE A520M K V2</a></td> <td data-label="Price (THB)">1,590.-</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Component">GPU</td>
+                        <td data-label="Detail"><a href="https://notebookspec.com/pc/9712275" target="_blank" rel="noopener noreferrer">ASUS Dual GeForce RTX 4060 EVO OC White</a></td> <td data-label="Price (THB)">11,200.-</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Component">RAM</td>
+                        <td data-label="Detail"><a href="https://notebookspec.com/pc/9712275" target="_blank" rel="noopener noreferrer">BLACKBERRY Pro DDR4 16GB (16GBx1) 3200 Black</a></td> <td data-label="Price (THB)">870.-</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Component">SSD</td>
+                        <td data-label="Detail"><a href="https://notebookspec.com/pc/9712275" target="_blank" rel="noopener noreferrer">BLACKBERRY BBR512GST1 512GB</a></td> <td data-label="Price (THB)">770.-</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Component">PSU</td>
+                        <td data-label="Detail"><a href="https://notebookspec.com/pc/9712275" target="_blank" rel="noopener noreferrer">SUPER FLOWER Zillion DB Bronze 650W</a></td> <td data-label="Price (THB)">1,650.-</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Component">Case</td>
+                        <td data-label="Detail"><a href="https://notebookspec.com/pc/9712275" target="_blank" rel="noopener noreferrer">CUBIC INDEED RGB Black</a></td> <td data-label="Price (THB)">950.-</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2" style="text-align: right; font-weight: bold;">Total System Cost:</td>
+                        <td style="font-weight: bold;">22,220.-</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </article>
+
+        <section class="ai-section" aria-labelledby="ai-heading">
+            <h2 id="ai-heading">Cyber-Tech AI: Your System Nexus</h2>
+            <p>ยินดีต้อนรับสู่ยุคดิจิทัล! ผมคือ Cyber-Tech AI ผู้ช่วยส่วนตัวของคุณ พร้อมวิเคราะห์และให้ข้อมูลเชิงลึกเกี่ยวกับระบบที่คุณสนใจ</p>
+            <div class="ai-chat-box">
+                <label for="aiUserInput" class="sr-only">ป้อนข้อความของคุณ:</label>
+                <input type="text" id="aiUserInput" placeholder="มีข้อสงสัยเกี่ยวกับ Core, GPU หรือประสิทธิภาพใช่ไหม?" onkeydown="if(event.keyCode === 13) sendAiMessage()">
+                <button onclick="sendAiMessage()">Engage AI</button>
+            </div>
+            <div class="ai-response" id="aiResponse" role="status" aria-live="polite">
+                <p><em>"ระบบพร้อมใช้งาน! หากคุณต้องการข้อมูลเพิ่มเติมเกี่ยวกับองค์ประกอบต่างๆ หรือต้องการคำแนะนำในการอัปเกรด เพียงแค่พิมพ์คำสั่งของคุณ"</em></p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p style="text-align: center; color: var(--subtle-gray-border); font-size: 0.9em; padding: 20px; margin-top: 50px;">
+            &copy; 2025 Cyber-Matrix Build. All rights reserved.
+        </p>
+    </footer>
+
+    <script>
+        function sendAiMessage() {
+            const userInput = document.getElementById('aiUserInput');
+            const aiResponseDiv = document.getElementById('aiResponse');
+            const userMessage = userInput.value.trim();
+            
+            if (userMessage === "") {
+                aiResponseDiv.innerHTML = "<p><em>\"[SYSTEM ALERT]: โปรดป้อนคำสั่งของคุณครับ! ผมไม่สามารถตอบสนองคำสั่งว่างเปล่าได้\"</em></p>";
+                return;
+            }
+
+            let response = "";
+            const lowerCaseInput = userMessage.toLowerCase();
+
+            // More detailed and engaging responses
+            if (lowerCaseInput.includes("cpu") || lowerCaseInput.includes("ryzen") || lowerCaseInput.includes("processor")) {
+                response = "AMD Ryzen 5 4600G: หัวใจหลักของระบบนี้! หน่วยประมวลผล APU ที่ทรงพลังผสานกราฟิก Radeon ในตัว เหมาะอย่างยิ่งสำหรับการทำงานทั่วไป, มัลติมีเดีย, และการเล่นเกมในระดับเริ่มต้นถึงกลางได้อย่างราบรื่นครับ หากคุณต้องการข้อมูลเชิงลึกเกี่ยวกับความเร็วหรือจำนวนคอร์ โปรดระบุเพิ่มเติม";
+            } else if (lowerCaseInput.includes("gpu") || lowerCaseInput.includes("rtx 4060") || lowerCaseInput.includes("graphic card") || lowerCaseInput.includes("การ์ดจอ")) {
+                response = "ASUS Dual GeForce RTX 4060 EVO OC White: นี่คือขุมพลังกราฟิกสำหรับคอเกมและนักสร้างสรรค์! ด้วยสถาปัตยกรรม Ada Lovelace ของ NVIDIA ช่วยให้คุณเพลิดเพลินกับการเล่นเกม AAA ที่ความละเอียด Full HD ได้อย่างยอดเยี่ยม พร้อมเทคโนโลยี Ray Tracing และ DLSS เพื่อภาพที่สมจริงและเฟรมเรตที่เหนือกว่า ดีไซน์สีขาวอันเป็นเอกลักษณ์ยังช่วยเสริมความงามของเคสอีกด้วยครับ";
+            } else if (lowerCaseInput.includes("ram") || lowerCaseInput.includes("หน่วยความจำ")) {
+                response = "BLACKBERRY Pro DDR4 16GB (16GBx1) 3200 Black: หน่วยความจำ 16GB ที่ความเร็ว 3200 MHz ถือว่าเพียงพอสำหรับการใช้งานทั่วไป, การเปิดหลายโปรแกรมพร้อมกัน, และการเล่นเกมส่วนใหญ่ครับ อย่างไรก็ตาม เพื่อประสิทธิภาพสูงสุดในการเล่นเกมและการทำงานหนัก แนะนำให้พิจารณาเพิ่มเป็น 32GB (16GBx2) เพื่อให้เป็น Dual Channel ซึ่งจะช่วยเพิ่มแบนด์วิธของหน่วยความจำได้อย่างมหาศาลครับ";
+            } else if (lowerCaseInput.includes("ssd") || lowerCaseInput.includes("พื้นที่เก็บข้อมูล") || lowerCaseInput.includes("storage") || lowerCaseInput.includes("ฮาร์ดดิสก์")) {
+                response = "BLACKBERRY BBR512GST1 512GB: SSD แบบ NVMe ขนาด 512GB ให้ความเร็วในการอ่าน-เขียนที่เหนือกว่าฮาร์ดดิสก์แบบเดิมมาก ช่วยให้ระบบปฏิบัติการบูตได้ภายในไม่กี่วินาที และโปรแกรมต่างๆ โหลดได้รวดเร็วทันใจ เหมาะสำหรับการติดตั้ง Windows และโปรแกรมหลักที่คุณใช้งานบ่อยๆ หากคุณมีไฟล์เกมขนาดใหญ่หรือต้องการพื้นที่เก็บข้อมูลมหาศาลเพื่อสะสมข้อมูล ผมแนะนำให้เพิ่ม SSD M.2 อีกตัว หรือ HDD ขนาดใหญ่ครับ";
+            } else if (lowerCaseInput.includes("psu") || lowerCaseInput.includes("power supply") || lowerCaseInput.includes("จ่ายไฟ")) {
+                response = "SUPER FLOWER Zillion DB Bronze 650W: แหล่งจ่ายไฟ (PSU) 650W ที่มีมาตรฐาน 80 PLUS Bronze รับรองประสิทธิภาพการจ่ายไฟที่เสถียรและประหยัดพลังงานครับ กำลังไฟขนาดนี้เหลือเฟือสำหรับระบบนี้ และยังเผื่อสำหรับการอัปเกรดในอนาคตได้อย่างสบายใจ เพื่อให้ทุกองค์ประกอบได้รับพลังงานที่เหมาะสมและปลอดภัย";
+            } else if (lowerCaseInput.includes("mainboard") || lowerCaseInput.includes("เมนบอร์ด") || lowerCaseInput.includes("motherboard")) {
+                response = "GIGABYTE A520M K V2: เมนบอร์ด A520M เป็นตัวเลือกที่คุ้มค่าสำหรับ CPU Ryzen 4600G ครับ แม้จะเป็นชิปเซ็ตระดับเริ่มต้น แต่ก็รองรับการทำงานได้ดีเยี่ยม เหมาะสำหรับการสร้างระบบที่ไม่เน้นการโอเวอร์คล็อกซีพียูมากนัก ให้ความเสถียรและฟังก์ชันพื้นฐานที่จำเป็นครบครันสำหรับระบบเกมมิ่งและใช้งานทั่วไป";
+            } else if (lowerCaseInput.includes("case") || lowerCaseInput.includes("เคส")) {
+                response = "CUBIC INDEED RGB Black: เคสคอมพิวเตอร์ดีไซน์ทันสมัยสีดำสนิทจาก CUBIC พร้อมไฟ RGB ที่ปรับแต่งได้ ช่วยเสริมความสวยงามให้ระบบของคุณดูโดดเด่นสไตล์ Cyberpunk การออกแบบภายในยังคำนึงถึงการไหลเวียนของอากาศที่ดี ทำให้ส่วนประกอบภายในระบายความร้อนได้อย่างมีประสิทธิภาพครับ";
+            } else if (lowerCaseInput.includes("ราคา") || lowerCaseInput.includes("total price") || lowerCaseInput.includes("ค่าใช้จ่าย") || lowerCaseInput.includes("งบประมาณ")) {
+                response = "ค่าใช้จ่ายรวมของระบบนี้อยู่ที่ **22,220 เครดิต (บาท)** ครับ! ถือเป็นการลงทุนที่คุ้มค่าสำหรับคอมพิวเตอร์ที่พร้อมตอบสนองทั้งการเล่นเกมและความบันเทิงในยุคดิจิทัล";
+            } else if (lowerCaseInput.includes("เหมาะกับอะไร") || lowerCaseInput.includes("การใช้งาน") || lowerCaseInput.includes("ใช้ทำอะไร")) {
+                response = "ระบบนี้เหมาะสำหรับ: <br>- **Gaming Enthusiast ระดับเริ่มต้นถึงกลาง**: เล่นเกม Full HD ได้อย่างลื่นไหล <br>- **Content Creator (มือสมัครเล่น)**: ทำงานกราฟิก ตัดต่อวิดีโอ (ที่ไม่หนักมาก) <br>- **งานทั่วไปและมัลติมีเดีย**: ท่องเว็บ, ดูหนัง, ฟังเพลง, ประชุมออนไลน์ ได้อย่างรวดเร็ว <br>สรุปคือ เป็นชุดประกอบที่สมดุลและทรงประสิทธิภาพในงบประมาณที่เข้าถึงได้ครับ!";
+            } else if (lowerCaseInput.includes("อัปเกรด") || lowerCaseInput.includes("upgrade")) {
+                response = "สำหรับการอัปเกรดในอนาคต: <br>- **RAM**: เพิ่มเป็น 32GB (16GBx2) เพื่อประสิทธิภาพ Dual Channel <br>- **SSD**: เพิ่มพื้นที่เก็บข้อมูลด้วย SSD M.2 อีกตัว หรือ HDD ขนาดใหญ่<br>- **CPU**: หากต้องการพลังประมวลผลที่มากขึ้น สามารถอัปเกรดไปใช้ Ryzen 5000 Series ได้ <br>- **GPU**: หากงบประมาณพร้อม การอัปเกรดการ์ดจอไปรุ่นที่สูงขึ้นจะช่วยเพิ่ม FPS ในเกมได้อย่างมหาศาลครับ";
+            } else if (lowerCaseInput.includes("สวัสดี") || lowerCaseInput.includes("hi") || lowerCaseInput.includes("hello")) {
+                response = "สวัสดีครับ! Cyber-Tech AI พร้อมให้บริการข้อมูลเสมอ มีคำถามอะไรเกี่ยวกับระบบของคุณหรือครับ?";
+            } else if (lowerCaseInput.includes("ขอบคุณ") || lowerCaseInput.includes("thank")) {
+                response = "ยินดีให้บริการครับ! หากมีข้อสงสัยเพิ่มเติม โปรดสอบถามได้เลย";
+            }
+            else {
+                // Fallback for unrecognized commands with a hint
+                const hints = [
+                    "ลองถามถึง 'CPU', 'GPU', 'RAM', หรือ 'ราคา' ดูนะครับ",
+                    "ผมสามารถให้ข้อมูลเชิงลลึกเกี่ยวกับ 'เมนบอร์ด' หรือ 'การ์ดจอ' ได้ครับ",
+                    "คุณอาจจะอยากรู้ว่าระบบนี้ 'เหมาะกับอะไร' หรือ 'อัปเกรด' อย่างไรบ้าง?",
+                    "มีคำถามเกี่ยวกับ 'PSU' หรือ 'Case' หรือเปล่าครับ?"
+                ];
+                response = `[RESPONSE]: คำสั่ง "${userMessage}" ไม่ได้รับการรับรู้ในฐานข้อมูลของผมครับ โปรดลองพิมพ์คำถามที่เจาะจงมากขึ้น หรือลองคำสั่งเช่น "${hints[Math.floor(Math.random() * hints.length)]}"`;
+            }
+
+            aiResponseDiv.innerHTML = `<p><em>"Cyber-Tech AI: ${response}"</em></p>`;
+            userInput.value = ""; // Clear input after sending
+        }
+    </script>
+</body>
+
+</html>

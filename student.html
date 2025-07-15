@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รายชื่อนักศึกษา</title>
+
+    <link rel="shortcut icon" href="images/utc.png" type="image/png">
+
+    <style>
+        /* Import Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Sarabun', sans-serif; /* กำหนดฟอนต์ Sarabun เป็นหลัก */
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f6; /* สีพื้นหลังของหน้า */
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden; /* ซ่อน scrollbar แนวนอนส่วนเกินที่เกิดจากอนิเมชัน */
+        }
+
+        /* --- สไตล์ส่วนหัว (Header) --- */
+        .header-container {
+            text-align: center;
+            padding: 25px 20px;
+            background-color: #ffffff; /* สีพื้นหลังส่วนหัว */
+            border-bottom: 3px solid #0056b3; /* เส้นขอบด้านล่างสีน้ำเงินเข้ม */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* เงาเล็กน้อยเพื่อมิติ */
+            /* Animation for header */
+            transform: translateY(-100%); /* เริ่มต้นจากด้านบนนอกจอ */
+            animation: slideInDown 0.8s ease-out forwards; /* อนิเมชันเลื่อนลง */
+        }
+
+        .header-logo {
+            width: 180px; /* ขนาดโลโก้ */
+            height: auto; /* รักษาสัดส่วน */
+            display: block; /* ทำให้จัดกึ่งกลางด้วย margin:auto ได้ */
+            margin: 0 auto 15px; /* จัดกึ่งกลางรูปภาพและเว้นระยะห่างด้านล่าง */
+        }
+
+        .header-container h1 {
+            font-size: 2.2em; /* ขนาดฟอนต์หัวข้อหลัก */
+            color: #0056b3; /* สีน้ำเงินสำหรับหัวข้อ */
+            margin: 0; /* ลบ margin เริ่มต้นของ h1 */
+            padding-bottom: 10px;
+        }
+
+        /* --- สไตล์ตาราง --- */
+        .student-table-container {
+            overflow-x: auto; /* เพิ่ม scrollbar แนวนอนถ้าตารางกว้างเกินจอ */
+            margin: 25px auto; /* จัดกึ่งกลางและเว้นระยะห่างด้านบน/ล่าง */
+            max-width: 95%; /* ไม่ให้กว้างเกินไปบนจอใหญ่มาก */
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 15px; /* ระยะห่างภายในคอนเทนเนอร์ตาราง */
+            opacity: 0; /* เริ่มต้นจากความโปร่งใส */
+            transform: translateY(20px); /* เริ่มต้นจากด้านล่างเล็กน้อย */
+            animation: fadeInRise 1s ease-out forwards; /* อนิเมชันจางและเลื่อนขึ้น */
+            animation-delay: 0.5s; /* เริ่มอนิเมชันหลังจาก Header */
+        }
+
+        table {
+            width: 100%; /* ให้ตารางเต็มความกว้างของ container */
+            border-collapse: collapse; /* ยุบขอบตารางให้ติดกัน */
+            margin: 0; /* ลบ margin เริ่มต้นของตาราง */
+            font-size: 0.95em;
+        }
+
+        table th,
+        table td {
+            border: 1px solid #ddd; /* ขอบตารางสีเทาอ่อน */
+            padding: 12px 15px; /* ระยะห่างภายในเซลล์ */
+            text-align: left; /* จัดข้อความชิดซ้าย */
+            /* เพิ่ม transition ให้กับ td ทุกอัน เพื่อรองรับ hover effect */
+            transition: background-color 0.2s ease-out;
+        }
+
+        table th {
+            background-color: #0056b3; /* พื้นหลังสีน้ำเงินเข้มสำหรับหัวตาราง */
+            color: white; /* ตัวอักษรสีขาวสำหรับหัวตาราง */
+            font-weight: bold;
+            text-transform: uppercase; /* ตัวพิมพ์ใหญ่สำหรับหัวตาราง */
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f2f2f2; /* สลับสีแถว (Zebra striping) */
+        }
+
+        /* เดิม: table tr:hover { background-color: #e0f2ff; transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); } */
+        /* เปลี่ยนเป็น: จัดการ hover effect แยกแต่ละเซลล์ */
+        table td:not([data-label="รหัสนักศึกษา"]):not([data-label="ชื่อสกุล"]) {
+            /* ไม่ต้องใส่ transform หรือ box-shadow ที่นี่ */
+            /* transition ถูกย้ายไปที่ table td ทั่วไปด้านบน */
+            position: relative; /* สำคัญสำหรับ z-index และการเคลื่อนที่ */
+            z-index: 1; /* ทำให้เซลล์ที่เคลื่อนไหวอยู่ด้านบนสุด */
+            transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background-color 0.2s ease-out; /* เพิ่ม transition */
+        }
+
+
+        /* Hover effect on cells (excluding student ID and name) */
+        table td:not([data-label="รหัสนักศึกษา"]):not([data-label="ชื่อสกุล"]):hover {
+            transform: translateY(-3px); /* เลื่อนขึ้นเล็กน้อย */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* เพิ่มเงา */
+            /* background-color จะเปลี่ยนตาม table tr:hover */
+        }
+
+        /* Keep the background color change for the whole row */
+        table tr:hover {
+            background-color: #e0f2ff; /* ไฮไลต์แถวเมื่อเมาส์ชี้ */
+        }
+
+
+        /* สไตล์เฉพาะสำหรับคอลัมน์ "สัปดาห์" */
+        .week-number {
+            text-align: center; /* จัดกึ่งกลางตัวเลขสัปดาห์ */
+            width: 40px; /* กำหนดความกว้างสำหรับคอลัมน์เล็กๆ */
+            min-width: 40px; /* ความกว้างขั้นต่ำเพื่อการตอบสนอง */
+            padding-left: 5px; /* ปรับ padding เล็กน้อยสำหรับคอลัมน์เล็ก */
+            padding-right: 5px;
+        }
+
+        /* สไตล์สำหรับหัวข้อ "เช็คชื่อ" ที่ครอบคลุมหลายคอลัมน์ */
+        .attendance-main-header {
+            text-align: center;
+            background-color: #0056b3; /* สีเดียวกับหัวตารางหลัก */
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        /* สไตล์สำหรับเซลล์ที่ใส่ checkbox */
+        .attendance-checkbox-cell {
+            text-align: center; /* จัดกึ่งกลาง checkbox */
+            vertical-align: middle; /* จัดกึ่งกลางแนวตั้ง */
+        }
+
+        /* Checkbox animation */
+        .attendance-checkbox-cell input[type="checkbox"] {
+            transform: scale(1); /* ขนาดเริ่มต้น */
+            transition: transform 0.1s ease-out; /* เพิ่ม transition */
+        }
+
+        .attendance-checkbox-cell input[type="checkbox"]:checked {
+            animation: checkboxBounce 0.3s ease-out; /* อนิเมชันเด้งเมื่อถูกเลือก */
+        }
+
+        /* --- สไตล์ส่วนท้าย (Footer) --- */
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+            background-color: #333;
+            color: #fff;
+            font-size: 0.85em;
+        }
+
+        /* Keyframe Animations */
+        @keyframes slideInDown {
+            from {
+                transform: translateY(-100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInRise {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes checkboxBounce {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); } /* ขยายใหญ่ขึ้นเล็กน้อย */
+            100% { transform: scale(1); } /* กลับสู่ขนาดปกติ */
+        }
+
+        /* Media queries สำหรับการแสดงผลบนหน้าจอขนาดเล็ก (Responsive) */
+        @media (max-width: 768px) {
+            .header-container h1 {
+                font-size: 1.8em;
+            }
+            .header-logo {
+                width: 150px;
+            }
+            table thead {
+                display: none; /* ซ่อนหัวตารางบนจอเล็ก */
+            }
+            table, table tbody, table tr, table td {
+                display: block; /* ทำให้องค์ประกอบตารางเรียงลงมาบนจอเล็ก */
+                width: 100%;
+            }
+            table tr {
+                margin-bottom: 15px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            }
+            table td {
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+            }
+            table td::before {
+                content: attr(data-label); /* ใช้ data-label แสดงหัวข้อ */
+                position: absolute;
+                left: 10px;
+                width: calc(50% - 20px);
+                padding-right: 10px;
+                white-space: nowrap;
+                text-align: left;
+                font-weight: bold;
+                color: #555;
+            }
+            .attendance-checkbox-cell {
+                text-align: right !important; /* จัดชิดขวาบนมือถือ */
+            }
+            /* Remove or adjust entrance animations for mobile if they cause issues */
+            .header-container, .student-table-container {
+                animation: none !important; /* ปิดอนิเมชันเมื่ออยู่บนมือถือเพื่อประสิทธิภาพ */
+                transform: none !important;
+                opacity: 1 !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header-container">
+        <img src="c:\Users\344_13\Downloads\utc.png" alt="โลโก้วิทยาลัยเทคนิคอุบลราชธานี" class="header-logo">
+        <h1>รายชื่อนักศึกษา ระดับประกาศนียบัตรวิชาชีพชั้นสูง สาขาวิชาคอมพิวเตอร์โปรแกรมเมอร์</h1>
+    </header>
+
+    <main>
+        <div class="student-table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th rowspan="2">รหัสนักศึกษา</th> <th rowspan="2">ชื่อสกุล</th> <th colspan="15" class="attendance-main-header">เช็คชื่อ</th> </tr>
+                    <tr>
+                        <th class="week-number">1</th>
+                        <th class="week-number">2</th>
+                        <th class="week-number">3</th>
+                        <th class="week-number">4</th>
+                        <th class="week-number">5</th>
+                        <th class="week-number">6</th>
+                        <th class="week-number">7</th>
+                        <th class="week-number">8</th>
+                        <th class="week-number">9</th>
+                        <th class="week-number">10</th>
+                        <th class="week-number">11</th>
+                        <th class="week-number">12</th>
+                        <th class="week-number">13</th>
+                        <th class="week-number">14</th>
+                        <th class="week-number">15</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td data-label="รหัสนักศึกษา">68319033001</td>
+                        <td data-label="ชื่อสกุล">นายสมชาย รักเรียน</td>
+                        <td data-label="สัปดาห์ที่ 1" class="attendance-checkbox-cell"><input type="checkbox" id="std001_wk1"></td>
+                        <td data-label="สัปดาห์ที่ 2" class="attendance-checkbox-cell"><input type="checkbox" id="std001_wk2"></td>
+                        <td data-label="สัปดาห์ที่ 3" class="attendance-checkbox-cell"><input type="checkbox" id="std001_wk3"></td>
+                        <td data-label="สัปดาห์ที่ 4" class="attendance-checkbox-cell"><input type="checkbox" id="std001_wk4"></td>
+                        <td data-label="สัปดาห์ที่ 5" class="attendance-checkbox-cell"><input type="checkbox" id="std001_wk5"></td>
+                        <td data-label="สัปดาห์ที่ 6" class="attendance-checkbox-cell"><input type="checkbox" id="std001_wk6"></td>
+                        <td data-label="สัปดาห์ที่ 7" class="attendance-checkbox-cell"><input type="checkbox" id="std001_wk7"></td>
+                        <td data-label="สัปดาห์ที่ 8" class="attendance-checkbox-cell"><input type="checkbox" id="std001_wk8"></td>
+                        <td data-label="สัปดาห์ที่ 9" class="attendance-checkbox-cell"><input type="checkbox" id="std001_wk9"></td>
+                        <td data-label="สัปดาห์ที่ 10" class="attendance-checkbox-cell"><input type="checkbox" id="std001_wk10"></td>
+                        <td data-label="สัปดาห์ที่ 11" class="attendance-checkbox-cell"><input type="checkbox" id="std001_wk11"></td>
+                        <td data-label="สัปดาห์ที่ 12" class="attendance-checkbox-cell"><input type="checkbox" id="std001_wk12"></td>
+                        <td data-label="สัปดาห์ที่ 13" class="attendance-checkbox-cell"><input type="checkbox" id="std001_wk13"></td>
+                        <td data-label="สัปดาห์ที่ 14" class="attendance-checkbox-cell"><input type="checkbox" id="std001_wk14"></td>
+                        <td data-label="สัปดาห์ที่ 15" class="attendance-checkbox-cell"><input type="checkbox" id="std001_wk15"></td>
+                    </tr>
+                    <tr>
+                        <td data-label="รหัสนักศึกษา">68319033002</td>
+                        <td data-label="ชื่อสกุล">นางสาวมานี มีสุข</td>
+                        <td data-label="สัปดาห์ที่ 1" class="attendance-checkbox-cell"><input type="checkbox" id="std002_wk1"></td>
+                        <td data-label="สัปดาห์ที่ 2" class="attendance-checkbox-cell"><input type="checkbox" id="std002_wk2"></td>
+                        <td data-label="สัปดาห์ที่ 3" class="attendance-checkbox-cell"><input type="checkbox" id="std002_wk3"></td>
+                        <td data-label="สัปดาห์ที่ 4" class="attendance-checkbox-cell"><input type="checkbox" id="std002_wk4"></td>
+                        <td data-label="สัปดาห์ที่ 5" class="attendance-checkbox-cell"><input type="checkbox" id="std002_wk5"></td>
+                        <td data-label="สัปดาห์ที่ 6" class="attendance-checkbox-cell"><input type="checkbox" id="std002_wk6"></td>
+                        <td data-label="สัปดาห์ที่ 7" class="attendance-checkbox-cell"><input type="checkbox" id="std002_wk7"></td>
+                        <td data-label="สัปดาห์ที่ 8" class="attendance-checkbox-cell"><input type="checkbox" id="std002_wk8"></td>
+                        <td data-label="สัปดาห์ที่ 9" class="attendance-checkbox-cell"><input type="checkbox" id="std002_wk9"></td>
+                        <td data-label="สัปดาห์ที่ 10" class="attendance-checkbox-cell"><input type="checkbox" id="std002_wk10"></td>
+                        <td data-label="สัปดาห์ที่ 11" class="attendance-checkbox-cell"><input type="checkbox" id="std002_wk11"></td>
+                        <td data-label="สัปดาห์ที่ 12" class="attendance-checkbox-cell"><input type="checkbox" id="std002_wk12"></td>
+                        <td data-label="สัปดาห์ที่ 13" class="attendance-checkbox-cell"><input type="checkbox" id="std002_wk13"></td>
+                        <td data-label="สัปดาห์ที่ 14" class="attendance-checkbox-cell"><input type="checkbox" id="std002_wk14"></td>
+                        <td data-label="สัปดาห์ที่ 15" class="attendance-checkbox-cell"><input type="checkbox" id="std002_wk15"></td>
+                    </tr>
+                    <tr>
+                        <td data-label="รหัสนักศึกษา">68319033003</td>
+                        <td data-label="ชื่อสกุล">นายปิติ ใจงาม</td>
+                        <td data-label="สัปดาห์ที่ 1" class="attendance-checkbox-cell"><input type="checkbox" id="std003_wk1"></td>
+                        <td data-label="สัปดาห์ที่ 2" class="attendance-checkbox-cell"><input type="checkbox" id="std003_wk2"></td>
+                        <td data-label="สัปดาห์ที่ 3" class="attendance-checkbox-cell"><input type="checkbox" id="std003_wk3"></td>
+                        <td data-label="สัปดาห์ที่ 4" class="attendance-checkbox-cell"><input type="checkbox" id="std003_wk4"></td>
+                        <td data-label="สัปดาห์ที่ 5" class="attendance-checkbox-cell"><input type="checkbox" id="std003_wk5"></td>
+                        <td data-label="สัปดาห์ที่ 6" class="attendance-checkbox-cell"><input type="checkbox" id="std003_wk6"></td>
+                        <td data-label="สัปดาห์ที่ 7" class="attendance-checkbox-cell"><input type="checkbox" id="std003_wk7"></td>
+                        <td data-label="สัปดาห์ที่ 8" class="attendance-checkbox-cell"><input type="checkbox" id="std003_wk8"></td>
+                        <td data-label="สัปดาห์ที่ 9" class="attendance-checkbox-cell"><input type="checkbox" id="std003_wk9"></td>
+                        <td data-label="สัปดาห์ที่ 10" class="attendance-checkbox-cell"><input type="checkbox" id="std003_wk10"></td>
+                        <td data-label="สัปดาห์ที่ 11" class="attendance-checkbox-cell"><input type="checkbox" id="std003_wk11"></td>
+                        <td data-label="สัปดาห์ที่ 12" class="attendance-checkbox-cell"><input type="checkbox" id="std003_wk12"></td>
+                        <td data-label="สัปดาห์ที่ 13" class="attendance-checkbox-cell"><input type="checkbox" id="std003_wk13"></td>
+                        <td data-label="สัปดาห์ที่ 14" class="attendance-checkbox-cell"><input type="checkbox" id="std003_wk14"></td>
+                        <td data-label="สัปดาห์ที่ 15" class="attendance-checkbox-cell"><input type="checkbox" id="std003_wk15"></td>
+                    </tr>
+                    <tr>
+                        <td data-label="รหัสนักศึกษา">68319033004</td>
+                        <td data-label="ชื่อสกุล">นางสาวสุดา ดีพร้อม</td>
+                        <td data-label="สัปดาห์ที่ 1" class="attendance-checkbox-cell"><input type="checkbox" id="std004_wk1"></td>
+                        <td data-label="สัปดาห์ที่ 2" class="attendance-checkbox-cell"><input type="checkbox" id="std004_wk2"></td>
+                        <td data-label="สัปดาห์ที่ 3" class="attendance-checkbox-cell"><input type="checkbox" id="std004_wk3"></td>
+                        <td data-label="สัปดาห์ที่ 4" class="attendance-checkbox-cell"><input type="checkbox" id="std004_wk4"></td>
+                        <td data-label="สัปดาห์ที่ 5" class="attendance-checkbox-cell"><input type="checkbox" id="std004_wk5"></td>
+                        <td data-label="สัปดาห์ที่ 6" class="attendance-checkbox-cell"><input type="checkbox" id="std004_wk6"></td>
+                        <td data-label="สัปดาห์ที่ 7" class="attendance-checkbox-cell"><input type="checkbox" id="std004_wk7"></td>
+                        <td data-label="สัปดาห์ที่ 8" class="attendance-checkbox-cell"><input type="checkbox" id="std004_wk8"></td>
+                        <td data-label="สัปดาห์ที่ 9" class="attendance-checkbox-cell"><input type="checkbox" id="std004_wk9"></td>
+                        <td data-label="สัปดาห์ที่ 10" class="attendance-checkbox-cell"><input type="checkbox" id="std004_wk10"></td>
+                        <td data-label="สัปดาห์ที่ 11" class="attendance-checkbox-cell"><input type="checkbox" id="std004_wk11"></td>
+                        <td data-label="สัปดาห์ที่ 12" class="attendance-checkbox-cell"><input type="checkbox" id="std004_wk12"></td>
+                        <td data-label="สัปดาห์ที่ 13" class="attendance-checkbox-cell"><input type="checkbox" id="std004_wk13"></td>
+                        <td data-label="สัปดาห์ที่ 14" class="attendance-checkbox-cell"><input type="checkbox" id="std004_wk14"></td>
+                        <td data-label="สัปดาห์ที่ 15" class="attendance-checkbox-cell"><input type="checkbox" id="std004_wk15"></td>
+                    </tr>
+                    <tr>
+                        <td data-label="รหัสนักศึกษา">68319033005</td>
+                        <td data-label="ชื่อสกุล">นายมานะ เก่งกาจ</td>
+                        <td data-label="สัปดาห์ที่ 1" class="attendance-checkbox-cell"><input type="checkbox" id="std005_wk1"></td>
+                        <td data-label="สัปดาห์ที่ 2" class="attendance-checkbox-cell"><input type="checkbox" id="std005_wk2"></td>
+                        <td data-label="สัปดาห์ที่ 3" class="attendance-checkbox-cell"><input type="checkbox" id="std005_wk3"></td>
+                        <td data-label="สัปดาห์ที่ 4" class="attendance-checkbox-cell"><input type="checkbox" id="std005_wk4"></td>
+                        <td data-label="สัปดาห์ที่ 5" class="attendance-checkbox-cell"><input type="checkbox" id="std005_wk5"></td>
+                        <td data-label="สัปดาห์ที่ 6" class="attendance-checkbox-cell"><input type="checkbox" id="std005_wk6"></td>
+                        <td data-label="สัปดาห์ที่ 7" class="attendance-checkbox-cell"><input type="checkbox" id="std005_wk7"></td>
+                        <td data-label="สัปดาห์ที่ 8" class="attendance-checkbox-cell"><input type="checkbox" id="std005_wk8"></td>
+                        <td data-label="สัปดาห์ที่ 9" class="attendance-checkbox-cell"><input type="checkbox" id="std005_wk9"></td>
+                        <td data-label="สัปดาห์ที่ 10" class="attendance-checkbox-cell"><input type="checkbox" id="std005_wk10"></td>
+                        <td data-label="สัปดาห์ที่ 11" class="attendance-checkbox-cell"><input type="checkbox" id="std005_wk11"></td>
+                        <td data-label="สัปดาห์ที่ 12" class="attendance-checkbox-cell"><input type="checkbox" id="std005_wk12"></td>
+                        <td data-label="สัปดาห์ที่ 13" class="attendance-checkbox-cell"><input type="checkbox" id="std005_wk13"></td>
+                        <td data-label="สัปดาห์ที่ 14" class="attendance-checkbox-cell"><input type="checkbox" id="std005_wk14"></td>
+                        <td data-label="สัปดาห์ที่ 15" class="attendance-checkbox-cell"><input type="checkbox" id="std005_wk15"></td>
+                    </tr>
+                    <tr>
+                        <td data-label="รหัสนักศึกษา">68319033006</td>
+                        <td data-label="ชื่อสกุล">นางสาวกุลธิดา ตั้งใจ</td>
+                        <td data-label="สัปดาห์ที่ 1" class="attendance-checkbox-cell"><input type="checkbox" id="std006_wk1"></td>
+                        <td data-label="สัปดาห์ที่ 2" class="attendance-checkbox-cell"><input type="checkbox" id="std006_wk2"></td>
+                        <td data-label="สัปดาห์ที่ 3" class="attendance-checkbox-cell"><input type="checkbox" id="std006_wk3"></td>
+                        <td data-label="สัปดาห์ที่ 4" class="attendance-checkbox-cell"><input type="checkbox" id="std006_wk4"></td>
+                        <td data-label="สัปดาห์ที่ 5" class="attendance-checkbox-cell"><input type="checkbox" id="std006_wk5"></td>
+                        <td data-label="สัปดาห์ที่ 6" class="attendance-checkbox-cell"><input type="checkbox" id="std006_wk6"></td>
+                        <td data-label="สัปดาห์ที่ 7" class="attendance-checkbox-cell"><input type="checkbox" id="std006_wk7"></td>
+                        <td data-label="สัปดาห์ที่ 8" class="attendance-checkbox-cell"><input type="checkbox" id="std006_wk8"></td>
+                        <td data-label="สัปดาห์ที่ 9" class="attendance-checkbox-cell"><input type="checkbox" id="std006_wk9"></td>
+                        <td data-label="สัปดาห์ที่ 10" class="attendance-checkbox-cell"><input type="checkbox" id="std006_wk10"></td>
+                        <td data-label="สัปดาห์ที่ 11" class="attendance-checkbox-cell"><input type="checkbox" id="std006_wk11"></td>
+                        <td data-label="สัปดาห์ที่ 12" class="attendance-checkbox-cell"><input type="checkbox" id="std006_wk12"></td>
+                        <td data-label="สัปดาห์ที่ 13" class="attendance-checkbox-cell"><input type="checkbox" id="std006_wk13"></td>
+                        <td data-label="สัปดาห์ที่ 14" class="attendance-checkbox-cell"><input type="checkbox" id="std006_wk14"></td>
+                        <td data-label="สัปดาห์ที่ 15" class="attendance-checkbox-cell"><input type="checkbox" id="std006_wk15"></td>
+                    </tr>
+                    <tr>
+                        <td data-label="รหัสนักศึกษา">68319033007</td>
+                        <td data-label="ชื่อสกุล">นายพรชัย มานะดี</td>
+                        <td data-label="สัปดาห์ที่ 1" class="attendance-checkbox-cell"><input type="checkbox" id="std007_wk1"></td>
+                        <td data-label="สัปดาห์ที่ 2" class="attendance-checkbox-cell"><input type="checkbox" id="std007_wk2"></td>
+                        <td data-label="สัปดาห์ที่ 3" class="attendance-checkbox-cell"><input type="checkbox" id="std007_wk3"></td>
+                        <td data-label="สัปดาห์ที่ 4" class="attendance-checkbox-cell"><input type="checkbox" id="std007_wk4"></td>
+                        <td data-label="สัปดาห์ที่ 5" class="attendance-checkbox-cell"><input type="checkbox" id="std007_wk5"></td>
+                        <td data-label="สัปดาห์ที่ 6" class="attendance-checkbox-cell"><input type="checkbox" id="std007_wk6"></td>
+                        <td data-label="สัปดาห์ที่ 7" class="attendance-checkbox-cell"><input type="checkbox" id="std007_wk7"></td>
+                        <td data-label="สัปดาห์ที่ 8" class="attendance-checkbox-cell"><input type="checkbox" id="std007_wk8"></td>
+                        <td data-label="สัปดาห์ที่ 9" class="attendance-checkbox-cell"><input type="checkbox" id="std007_wk9"></td>
+                        <td data-label="สัปดาห์ที่ 10" class="attendance-checkbox-cell"><input type="checkbox" id="std007_wk10"></td>
+                        <td data-label="สัปดาห์ที่ 11" class="attendance-checkbox-cell"><input type="checkbox" id="std007_wk11"></td>
+                        <td data-label="สัปดาห์ที่ 12" class="attendance-checkbox-cell"><input type="checkbox" id="std007_wk12"></td>
+                        <td data-label="สัปดาห์ที่ 13" class="attendance-checkbox-cell"><input type="checkbox" id="std007_wk13"></td>
+                        <td data-label="สัปดาห์ที่ 14" class="attendance-checkbox-cell"><input type="checkbox" id="std007_wk14"></td>
+                        <td data-label="สัปดาห์ที่ 15" class="attendance-checkbox-cell"><input type="checkbox" id="std007_wk15"></td>
+                    </tr>
+                    <tr>
+                        <td data-label="รหัสนักศึกษา">68319033008</td>
+                        <td data-label="ชื่อสกุล">นางสาวนารี รุ่งเรือง</td>
+                        <td data-label="สัปดาห์ที่ 1" class="attendance-checkbox-cell"><input type="checkbox" id="std008_wk1"></td>
+                        <td data-label="สัปดาห์ที่ 2" class="attendance-checkbox-cell"><input type="checkbox" id="std008_wk2"></td>
+                        <td data-label="สัปดาห์ที่ 3" class="attendance-checkbox-cell"><input type="checkbox" id="std008_wk3"></td>
+                        <td data-label="สัปดาห์ที่ 4" class="attendance-checkbox-cell"><input type="checkbox" id="std008_wk4"></td>
+                        <td data-label="สัปดาห์ที่ 5" class="attendance-checkbox-cell"><input type="checkbox" id="std008_wk5"></td>
+                        <td data-label="สัปดาห์ที่ 6" class="attendance-checkbox-cell"><input type="checkbox" id="std008_wk6"></td>
+                        <td data-label="สัปดาห์ที่ 7" class="attendance-checkbox-cell"><input type="checkbox" id="std008_wk7"></td>
+                        <td data-label="สัปดาห์ที่ 8" class="attendance-checkbox-cell"><input type="checkbox" id="std008_wk8"></td>
+                        <td data-label="สัปดาห์ที่ 9" class="attendance-checkbox-cell"><input type="checkbox" id="std008_wk9"></td>
+                        <td data-label="สัปดาห์ที่ 10" class="attendance-checkbox-cell"><input type="checkbox" id="std008_wk10"></td>
+                        <td data-label="สัปดาห์ที่ 11" class="attendance-checkbox-cell"><input type="checkbox" id="std008_wk11"></td>
+                        <td data-label="สัปดาห์ที่ 12" class="attendance-checkbox-cell"><input type="checkbox" id="std008_wk12"></td>
+                        <td data-label="สัปดาห์ที่ 13" class="attendance-checkbox-cell"><input type="checkbox" id="std008_wk13"></td>
+                        <td data-label="สัปดาห์ที่ 14" class="attendance-checkbox-cell"><input type="checkbox" id="std008_wk14"></td>
+                        <td data-label="สัปดาห์ที่ 15" class="attendance-checkbox-cell"><input type="checkbox" id="std008_wk15"></td>
+                    </tr>
+                    <tr>
+                        <td data-label="รหัสนักศึกษา">68319033009</td>
+                        <td data-label="ชื่อสกุล">นายชูใจ สุขสบาย</td>
+                        <td data-label="สัปดาห์ที่ 1" class="attendance-checkbox-cell"><input type="checkbox" id="std009_wk1"></td>
+                        <td data-label="สัปดาห์ที่ 2" class="attendance-checkbox-cell"><input type="checkbox" id="std009_wk2"></td>
+                        <td data-label="สัปดาห์ที่ 3" class="attendance-checkbox-cell"><input type="checkbox" id="std009_wk3"></td>
+                        <td data-label="สัปดาห์ที่ 4" class="attendance-checkbox-cell"><input type="checkbox" id="std009_wk4"></td>
+                        <td data-label="สัปดาห์ที่ 5" class="attendance-checkbox-cell"><input type="checkbox" id="std009_wk5"></td>
+                        <td data-label="สัปดาห์ที่ 6" class="attendance-checkbox-cell"><input type="checkbox" id="std009_wk6"></td>
+                        <td data-label="สัปดาห์ที่ 7" class="attendance-checkbox-cell"><input type="checkbox" id="std009_wk7"></td>
+                        <td data-label="สัปดาห์ที่ 8" class="attendance-checkbox-cell"><input type="checkbox" id="std009_wk8"></td>
+                        <td data-label="สัปดาห์ที่ 9" class="attendance-checkbox-cell"><input type="checkbox" id="std009_wk9"></td>
+                        <td data-label="สัปดาห์ที่ 10" class="attendance-checkbox-cell"><input type="checkbox" id="std009_wk10"></td>
+                        <td data-label="สัปดาห์ที่ 11" class="attendance-checkbox-cell"><input type="checkbox" id="std009_wk11"></td>
+                        <td data-label="สัปดาห์ที่ 12" class="attendance-checkbox-cell"><input type="checkbox" id="std009_wk12"></td>
+                        <td data-label="สัปดาห์ที่ 13" class="attendance-checkbox-cell"><input type="checkbox" id="std009_wk13"></td>
+                        <td data-label="สัปดาห์ที่ 14" class="attendance-checkbox-cell"><input type="checkbox" id="std009_wk14"></td>
+                        <td data-label="สัปดาห์ที่ 15" class="attendance-checkbox-cell"><input type="checkbox" id="std009_wk15"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 วิทยาลัยเทคนิคอุบลราชธานี. สงวนลิขสิทธิ์.</p>
+    </footer>
+</body>
+
+</html>
